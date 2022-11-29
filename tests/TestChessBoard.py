@@ -1,10 +1,10 @@
-from src.chess.ChessBoard import ChessBoard
-from src.chess.ChessPiece import ChessPiece
-from src.chess.ChessSquare import from_string
+from chess.ChessBoard import ChessBoard
+from chess.ChessPiece import ChessPiece
+from chess.ChessSquare import from_string
 from unittest import TestCase
 
 
-class ChessBoardTest(TestCase):
+class TestChessBoard(TestCase):
     def test_empty_board(self):
         new_board = ChessBoard()
         self.assertEqual([], new_board.get_pieces())

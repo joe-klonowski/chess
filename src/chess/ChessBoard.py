@@ -1,7 +1,7 @@
 from functools import cmp_to_key
 
-from ChessPiece import ChessPiece, compare_pieces_by_square
-from ChessSquare import from_string
+from chess.ChessPiece import ChessPiece, compare_pieces_by_square
+from chess.ChessSquare import from_string
 
 
 class ChessBoard:

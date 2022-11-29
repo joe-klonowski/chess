@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-import ChessSquare
+
+from chess import ChessSquare
 
 
 @dataclass

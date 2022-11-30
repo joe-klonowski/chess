@@ -5,8 +5,8 @@ class ChessBoard:
     def __init__(self):
         self.pieces = SortedDict({})
 
-    def add_piece(self, piece, square):
-        self.pieces.update({square: piece})
+    def add_piece(self, color, piece, square):
+        self.pieces.update({square: (color, piece)})
 
     def get_pieces(self):
         return self.pieces

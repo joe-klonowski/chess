@@ -27,9 +27,16 @@ class TestChessBoard(TestCase):
         result = STARTING_BOARD.get_piece_on_square("a2")
         self.assertEqual("P", result)
 
-    def test_apply_move_pawn_one_square(self):
+    def test_apply_move_pawn_two_squares(self):
         starting_board_copy = copy.deepcopy(STARTING_BOARD)
         starting_board_copy.apply_move("e2-e4")
 
         self.assertIsNone(starting_board_copy.get_piece_on_square("e2"))
         self.assertEqual("P", starting_board_copy.get_piece_on_square("e4"))
+
+    def test_apply_move_knight(self):
+        starting_board_copy = copy.deepcopy(STARTING_BOARD)
+        starting_board_copy.apply_move("g1-f3")
+
+        self.assertIsNone(starting_board_copy.get_piece_on_square("g1"))
+        self.assertEqual("N", starting_board_copy.get_piece_on_square("f3"))

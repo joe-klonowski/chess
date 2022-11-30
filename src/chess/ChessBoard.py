@@ -1,13 +1,13 @@
 from functools import cmp_to_key
+from sortedcontainers import SortedDict
 
 from chess.ChessPiece import ChessPiece, compare_pieces_by_square
-from chess.ChessSquare import from_string
+from chess.ChessSquare import from_string, ChessSquare
 
 
 class ChessBoard:
     def __init__(self):
-        self.pieces_sorted = False
-        self.pieces = []
+        self.pieces = SortedDict({})
 
     def add_piece(self, piece, square):
         """
@@ -15,21 +15,17 @@ class ChessBoard:
         :param square: Can be a ChessSquare or a str like "b8"
         :return:
         """
-        if isinstance(square, str):
-            square = from_string(square)
-        self.pieces_sorted = False
-        self.pieces.append(ChessPiece(piece, square))
+        square_str = square
+        if isinstance(square, ChessSquare):
+            square_str = str(square)
+        self.pieces.update({square_str: piece})
 
     def get_pieces(self):
-        self.__sort_pieces_if_necessary()
         return self.pieces
 
-    def __sort_pieces_if_necessary(self):
-        if not self.pieces_sorted:
-            self.pieces = sorted(self.pieces, key=cmp_to_key(compare_pieces_by_square))
-            self.pieces_sorted = True
+    def get_piece_on_square(self, square):
+        # TODO
+        return
 
     def __eq__(self, other):
-        self.__sort_pieces_if_necessary()
-        other.__sort_pieces_if_necessary()
         return self.pieces == other.pieces

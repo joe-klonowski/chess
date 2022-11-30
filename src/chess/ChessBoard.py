@@ -21,5 +21,15 @@ class ChessBoard:
         ending_square = move[3:5]
         self.pieces.update({starting_square: None, ending_square: piece_type})
 
+    def get_pieces_for_color(self, color):
+        result = SortedDict()
+        for item in self.pieces.items():
+            piece = item[1]
+            current_item_color = piece[0]
+            if current_item_color == color:
+                square = item[0]
+                result.update({square: piece})
+        return result
+
     def __eq__(self, other):
         return self.pieces == other.pieces

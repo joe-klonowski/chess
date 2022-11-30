@@ -1,4 +1,5 @@
 from chess.ChessBoard import ChessBoard
+from chess.GameState import GameState
 
 
 def build_starting_board():
@@ -39,3 +40,5 @@ def build_starting_board():
 
 
 STARTING_BOARD = build_starting_board()
+
+STARTING_GAME_STATE = GameState(STARTING_BOARD, "white")

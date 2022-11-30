@@ -5,6 +5,7 @@ from chess.ChessBoard import ChessBoard
 from unittest import TestCase
 
 from chess.constants import STARTING_BOARD
+from constants import KINGS_AND_ONE_PAWN_BOARD
 
 
 class TestChessBoard(TestCase):
@@ -40,3 +41,13 @@ class TestChessBoard(TestCase):
 
         self.assertIsNone(starting_board_copy.get_piece_on_square("g1"))
         self.assertEqual(("white", "N"), starting_board_copy.get_piece_on_square("f3"))
+
+    def test_get_pieces_for_color_white(self):
+        actual = KINGS_AND_ONE_PAWN_BOARD.get_pieces_for_color("white")
+
+        expected = SortedDict({
+            "e1": ("white", "K"),
+            "e2": ("white", "P"),
+        })
+
+        self.assertEqual(expected, actual)

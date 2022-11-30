@@ -1,8 +1,6 @@
 from sortedcontainers import SortedDict
 
 from chess.ChessBoard import ChessBoard
-from chess.ChessPiece import ChessPiece
-from chess.ChessSquare import from_string
 from unittest import TestCase
 
 from chess.constants import STARTING_BOARD

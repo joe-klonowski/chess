@@ -1,8 +1,6 @@
-from functools import cmp_to_key
 from sortedcontainers import SortedDict
 
-from chess.ChessPiece import ChessPiece, compare_pieces_by_square
-from chess.ChessSquare import from_string, ChessSquare
+from chess.ChessSquare import ChessSquare
 
 
 class ChessBoard:

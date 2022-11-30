@@ -1,3 +1,4 @@
+import copy
 from sortedcontainers import SortedDict
 
 from chess.ChessBoard import ChessBoard
@@ -25,3 +26,10 @@ class TestChessBoard(TestCase):
     def test_get_piece_on_square_with_nonempty_square(self):
         result = STARTING_BOARD.get_piece_on_square("a2")
         self.assertEqual("P", result)
+
+    def test_apply_move_pawn_one_square(self):
+        starting_board_copy = copy.deepcopy(STARTING_BOARD)
+        starting_board_copy.apply_move("e2-e4")
+
+        self.assertIsNone(starting_board_copy.get_piece_on_square("e2"))
+        self.assertEqual("P", starting_board_copy.get_piece_on_square("e4"))

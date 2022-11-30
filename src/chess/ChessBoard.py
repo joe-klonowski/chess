@@ -1,22 +1,12 @@
 from sortedcontainers import SortedDict
 
-from chess.ChessSquare import ChessSquare
-
 
 class ChessBoard:
     def __init__(self):
         self.pieces = SortedDict({})
 
     def add_piece(self, piece, square):
-        """
-        :param piece:
-        :param square: Can be a ChessSquare or a str like "b8"
-        :return:
-        """
-        square_str = square
-        if isinstance(square, ChessSquare):
-            square_str = str(square)
-        self.pieces.update({square_str: piece})
+        self.pieces.update({square: piece})
 
     def get_pieces(self):
         return self.pieces

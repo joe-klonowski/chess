@@ -24,8 +24,7 @@ class ChessBoard:
         return self.pieces
 
     def get_piece_on_square(self, square):
-        # TODO
-        return
+        return self.pieces.get(square)
 
     def __eq__(self, other):
         return self.pieces == other.pieces

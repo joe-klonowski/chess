@@ -5,6 +5,8 @@ from chess.ChessPiece import ChessPiece
 from chess.ChessSquare import from_string
 from unittest import TestCase
 
+from chess.constants import STARTING_BOARD
+
 
 class TestChessBoard(TestCase):
     def test_empty_board(self):
@@ -18,3 +20,10 @@ class TestChessBoard(TestCase):
         new_board.add_piece("Q", "d1")
 
         self.assertEqual(queen_on_d1, new_board.get_pieces())
+
+    def test_get_piece_on_square_with_empty_square(self):
+        self.assertIsNone(STARTING_BOARD.get_piece_on_square("a3"))
+
+    def test_get_piece_on_square_with_nonempty_square(self):
+        result = STARTING_BOARD.get_piece_on_square("a2")
+        self.assertEqual("P", result)

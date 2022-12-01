@@ -42,3 +42,5 @@ def build_starting_board():
 STARTING_BOARD = build_starting_board()
 
 STARTING_GAME_STATE = GameState(STARTING_BOARD, "white")
+
+EIGHT_CARDINAL_DIRECTIONS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]

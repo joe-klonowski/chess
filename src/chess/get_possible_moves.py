@@ -1,3 +1,6 @@
+from chess.constants import EIGHT_CARDINAL_DIRECTIONS
+
+
 def get_possible_moves(game_state):
     player_to_move = game_state.player_to_move
     board = game_state.board
@@ -37,7 +40,7 @@ def get_relative_square(starting_square, direction, number):
             new_rank_int = new_rank_int - number
             new_file_ord = new_file_ord - number
         case _:
-            raise NotImplementedError
+            raise NotImplementedError(f"Unrecognized direction {direction}")
     if new_rank_int < 1 or new_rank_int > 8:
         return None
     if new_file_ord < ord("a") or new_file_ord > ord("h"):
@@ -48,14 +51,44 @@ def get_relative_square(starting_square, direction, number):
 
 
 def get_possible_moves_for_king(game_state, square):
-    result = set()
     squares_to_check = set()
+    for direction in EIGHT_CARDINAL_DIRECTIONS:
+        square_in_this_direction = get_relative_square(square, direction, 1)
+        if square_in_this_direction is not None:
+            squares_to_check.add(square_in_this_direction)
+    result = set()
+    for square_to_check in squares_to_check:
+        if game_state.board.get_piece_on_square(square_to_check) is None:
+            result.add(f"{square}-{square_to_check}")
 
+    # TODO filter out moves that would put the king in check.
     return result
 
 
+def pawn_is_on_starting_square(pawn_color, square):
+    rank = square[1]
+    if pawn_color == "white" and rank == "2":
+        return True
+    if pawn_color == "black" and rank == "7":
+        return True
+    return False
+
+
 def get_possible_moves_for_pawn(game_state, square):
-    pass
+    pawn_color = game_state.board.get_piece_on_square(square)[0]
+    pawn_direction = "N"
+    if pawn_color == "black":
+        pawn_direction = "S"
+    result = set()
+    square_one_space_forward = get_relative_square(square, pawn_direction, 1)
+    result.add(f"{square}-{square_one_space_forward}")
+
+    if pawn_is_on_starting_square(pawn_color, square):
+        square_two_spaces_forward = get_relative_square(square, pawn_direction, 2)
+        result.add(f"{square}-{square_two_spaces_forward}")
+
+    # TODO add support for captures and promotions
+    return result
 
 
 def get_possible_moves_for_piece(game_state, square):

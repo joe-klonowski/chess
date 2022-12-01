@@ -1,7 +1,8 @@
+import copy
 from unittest import TestCase
 
 from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_piece, get_possible_moves_for_king, \
-    get_relative_square
+    get_relative_square, get_possible_moves_for_pawn
 from constants import KINGS_AND_ONE_PAWN_GAME_STATE
 
 
@@ -86,17 +87,38 @@ class TestGetPossibleMoves(TestCase):
         expected = "d3"
         self.assertEqual(expected, actual)
 
-    # def test_get_possible_moves_for_king(self):
-    #     actual = get_possible_moves_for_king(KINGS_AND_ONE_PAWN_GAME_STATE, "e1")
-    #
-    #     expected = {
-    #         "e1-f1",
-    #         "e1-f2",
-    #         "e1-d1",
-    #         "e1-d2",
-    #     }
-    #
-    #     self.assertEqual(expected, actual)
+    def test_get_possible_moves_for_king(self):
+        actual = get_possible_moves_for_king(KINGS_AND_ONE_PAWN_GAME_STATE, "e1")
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_for_pawn_starting_square(self):
+        actual = get_possible_moves_for_pawn(KINGS_AND_ONE_PAWN_GAME_STATE, "e2")
+
+        expected = {
+            "e2-e3",
+            "e2-e4"
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_for_pawn_not_starting_square(self):
+        new_game_state = copy.deepcopy(KINGS_AND_ONE_PAWN_GAME_STATE)
+        new_game_state.board.apply_move("e2-e3")
+        actual = get_possible_moves_for_pawn(new_game_state, "e3")
+
+        expected = {
+            "e3-e4"
+        }
+
+        self.assertEqual(expected, actual)
 
     # TODO add test to verify that king can't move into check
 

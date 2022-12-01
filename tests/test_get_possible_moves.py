@@ -135,13 +135,3 @@ class TestGetPossibleMoves(TestCase):
         }
 
         self.assertEqual(expected, actual)
-
-    def test_get_possible_moves_pawn(self):
-        actual = get_possible_moves_for_piece(KINGS_AND_ONE_PAWN_GAME_STATE, "e2")
-
-        expected = {
-            "e2-e4",
-            "e2-e3"
-        }
-
-        self.assertEqual(expected, actual)

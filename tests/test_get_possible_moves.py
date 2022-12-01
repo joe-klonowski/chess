@@ -99,6 +99,8 @@ class TestGetPossibleMoves(TestCase):
 
         self.assertEqual(expected, actual)
 
+    # TODO add test to verify that king can't move into check
+
     def test_get_possible_moves_for_pawn_starting_square(self):
         actual = get_possible_moves_for_pawn(KINGS_AND_ONE_PAWN_GAME_STATE, "e2")
 
@@ -120,29 +122,26 @@ class TestGetPossibleMoves(TestCase):
 
         self.assertEqual(expected, actual)
 
-    # TODO add test to verify that king can't move into check
+    def test_get_possible_moves_two_kings_one_pawn(self):
+        actual = get_possible_moves(KINGS_AND_ONE_PAWN_GAME_STATE)
 
-    # TODO
-    # def test_get_possible_moves_two_kings_one_pawn(self):
-    #     actual = get_possible_moves(KINGS_AND_ONE_PAWN_GAME_STATE)
-    #
-    #     expected = {
-    #         "e1-f1",
-    #         "e1-f2",
-    #         "e1-d1",
-    #         "e1-d2",
-    #         "e2-e4",
-    #         "e2-e3"
-    #     }
-    #
-    #     self.assertEqual(expected, actual)
-    #
-    # def test_get_possible_moves_pawn(self):
-    #     actual = get_possible_moves_for_piece(KINGS_AND_ONE_PAWN_GAME_STATE, "e2")
-    #
-    #     expected = {
-    #         "e2-e4",
-    #         "e2-e3"
-    #     }
-    #
-    #     self.assertEqual(expected, actual)
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e2-e4",
+            "e2-e3"
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_pawn(self):
+        actual = get_possible_moves_for_piece(KINGS_AND_ONE_PAWN_GAME_STATE, "e2")
+
+        expected = {
+            "e2-e4",
+            "e2-e3"
+        }
+
+        self.assertEqual(expected, actual)

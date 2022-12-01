@@ -7,10 +7,11 @@ def get_possible_moves(game_state):
     pieces = board.pieces
     pieces_of_player_to_move = board.get_pieces_for_color(player_to_move)
     result = set()
-    for piece in pieces_of_player_to_move:
-        # TODO
-        pass
-    return
+    for piece in pieces_of_player_to_move.items():
+        square_for_this_piece = piece[0]
+        moves_for_this_piece = get_possible_moves_for_piece(game_state, square_for_this_piece)
+        result = result.union(moves_for_this_piece)
+    return result
 
 
 def get_relative_square(starting_square, direction, number):

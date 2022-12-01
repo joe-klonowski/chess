@@ -24,6 +24,18 @@ def get_relative_square(starting_square, direction, number):
             new_file_ord = new_file_ord + number
         case "W":
             new_file_ord = new_file_ord - number
+        case "NE":
+            new_rank_int = new_rank_int + number
+            new_file_ord = new_file_ord + number
+        case "NW":
+            new_rank_int = new_rank_int + number
+            new_file_ord = new_file_ord - number
+        case "SE":
+            new_rank_int = new_rank_int - number
+            new_file_ord = new_file_ord + number
+        case "SW":
+            new_rank_int = new_rank_int - number
+            new_file_ord = new_file_ord - number
         case _:
             raise NotImplementedError
     if new_rank_int < 1 or new_rank_int > 8:

@@ -58,7 +58,33 @@ class TestGetPossibleMoves(TestCase):
     def test_get_relative_square_west_off_board(self):
         self.assertIsNone(get_relative_square("e4", "W", 5))
 
-    # TODO test NE, SE, SW, NW
+    def test_get_relative_square_northeast_one(self):
+        actual = get_relative_square("e4", "NE", 1)
+        expected = "f5"
+        self.assertEqual(expected, actual)
+
+    def test_get_relative_square_northeast_two(self):
+        actual = get_relative_square("e4", "NE", 2)
+        expected = "g6"
+        self.assertEqual(expected, actual)
+
+    def test_get_relative_square_northeast_off_board(self):
+        self.assertIsNone(get_relative_square("e4", "NE", 5))
+
+    def test_get_relative_square_northwest_one(self):
+        actual = get_relative_square("e4", "NW", 1)
+        expected = "d5"
+        self.assertEqual(expected, actual)
+
+    def test_get_relative_square_souteast_one(self):
+        actual = get_relative_square("e4", "SE", 1)
+        expected = "f3"
+        self.assertEqual(expected, actual)
+
+    def test_get_relative_square_southwest_one(self):
+        actual = get_relative_square("e4", "SW", 1)
+        expected = "d3"
+        self.assertEqual(expected, actual)
 
     # def test_get_possible_moves_for_king(self):
     #     actual = get_possible_moves_for_king(KINGS_AND_ONE_PAWN_GAME_STATE, "e1")

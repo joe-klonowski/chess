@@ -6,9 +6,8 @@ def get_possible_moves(game_state):
     board = game_state.board
     pieces_of_player_to_move = board.get_pieces_for_color(player_to_move)
     result = set()
-    for piece in pieces_of_player_to_move.items():
-        square_for_this_piece = piece[0]
-        moves_for_this_piece = get_possible_moves_for_piece(game_state, square_for_this_piece)
+    for square in pieces_of_player_to_move.keys():
+        moves_for_this_piece = get_possible_moves_for_piece(game_state, square)
         result = result.union(moves_for_this_piece)
     return result
 

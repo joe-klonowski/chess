@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_piece, get_possible_moves_for_king, \
     get_relative_square, get_possible_moves_for_pawn
-from constants import KINGS_AND_ONE_PAWN_GAME_STATE
+from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
@@ -132,6 +132,20 @@ class TestGetPossibleMoves(TestCase):
             "e1-d2",
             "e2-e4",
             "e2-e3"
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_two_kings_one_black_pawn(self):
+        actual = get_possible_moves(KINGS_AND_ONE_BLACK_PAWN_GAME_STATE)
+
+        expected = {
+            "e7-e6",
+            "e7-e5",
+            "e8-f8",
+            "e8-f7",
+            "e8-d8",
+            "e8-d7",
         }
 
         self.assertEqual(expected, actual)

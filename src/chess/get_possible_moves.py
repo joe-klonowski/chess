@@ -1,4 +1,4 @@
-from chess.constants import EIGHT_CARDINAL_DIRECTIONS
+from chess.constants import EIGHT_CARDINAL_DIRECTIONS, FOUR_CARDINAL_DIRECTIONS
 
 
 def get_possible_moves(game_state):
@@ -90,6 +90,29 @@ def get_possible_moves_for_pawn(game_state, square):
     return result
 
 
+def get_possible_moves_for_rook(game_state, square):
+    rook_color = game_state.board.get_piece_on_square(square)[0]
+    result = set()
+    # TODO refactor this linear search implementation to be reusable by bishops and queens
+    for direction in FOUR_CARDINAL_DIRECTIONS:
+        i = 1
+        should_check_next_square = True
+        while should_check_next_square:
+            next_square_to_check = get_relative_square(square, direction, i)
+            if next_square_to_check is None:
+                break
+            piece_on_next_square_to_check = game_state.board.get_piece_on_square(next_square_to_check)
+            if piece_on_next_square_to_check is None:
+                result.add(f"{square}-{next_square_to_check}")
+                i += 1
+            else:  # There is a piece on next_square_to_check
+                should_check_next_square = False
+                color_of_piece_on_next_square_to_check = piece_on_next_square_to_check[0]
+                if color_of_piece_on_next_square_to_check != rook_color:
+                    result.add(f"{square}-{next_square_to_check}")
+    return result
+
+
 def get_possible_moves_for_piece(game_state, square):
     piece_on_square = game_state.board.get_piece_on_square(square)
     piece_type = piece_on_square[1]
@@ -98,5 +121,7 @@ def get_possible_moves_for_piece(game_state, square):
             return get_possible_moves_for_king(game_state, square)
         case "P":
             return get_possible_moves_for_pawn(game_state, square)
+        case "R":
+            return get_possible_moves_for_rook(game_state, square)
         case _:
-            raise ValueError
+            raise ValueError(f"Unsupported piece type {piece_type}")

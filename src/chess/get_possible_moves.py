@@ -4,7 +4,6 @@ from chess.constants import EIGHT_CARDINAL_DIRECTIONS
 def get_possible_moves(game_state):
     player_to_move = game_state.player_to_move
     board = game_state.board
-    pieces = board.pieces
     pieces_of_player_to_move = board.get_pieces_for_color(player_to_move)
     result = set()
     for piece in pieces_of_player_to_move.items():

@@ -1,13 +1,13 @@
 import copy
 from unittest import TestCase
 
-from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_piece, get_possible_moves_for_king, \
+from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_king, \
     get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves
 from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE, \
     KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
     KING_AND_QUEEN_VS_KING_GAME_STATE, KING_AND_KNIGHT_VS_KING_GAME_STATE, KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE, \
     KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT, \
-    KING_CAN_CAPTURE_GAME_STATE, PAWN_CAN_CAPTURE_GAME_STATE, PAWN_CANT_CAPTURE_SAME_GAME_STATE
+    KING_CAN_CAPTURE_GAME_STATE, PAWN_CAN_CAPTURE_GAME_STATE, PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
@@ -151,7 +151,7 @@ class TestGetPossibleMoves(TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_possible_moves_for_pawn_cant_capture_same_color_piece(self):
-        actual = get_possible_moves_for_pawn(PAWN_CANT_CAPTURE_SAME_GAME_STATE, "d2")
+        actual = get_possible_moves_for_pawn(PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE, "d2")
 
         expected = {
             "d2-d3",

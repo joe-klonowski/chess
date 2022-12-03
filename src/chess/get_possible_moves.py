@@ -1,5 +1,5 @@
 from chess.constants import EIGHT_CARDINAL_DIRECTIONS, FOUR_CARDINAL_DIRECTIONS, FOUR_DIAGONAL_DIRECTIONS, \
-    EIGHT_KNIGHT_DIRECTIONS
+    EIGHT_KNIGHT_DIRECTIONS, PIECE_TYPES_PAWN_CAN_PROMOTE_TO
 
 
 def get_possible_moves(game_state):
@@ -10,6 +10,7 @@ def get_possible_moves(game_state):
     for square in pieces_of_player_to_move.keys():
         moves_for_this_piece = get_possible_moves_for_piece(game_state, square)
         result = result.union(moves_for_this_piece)
+    # TODO add support for castling
     return result
 
 
@@ -108,21 +109,24 @@ def get_possible_moves_for_pawn(game_state, square):
     pawn_color = game_state.board.get_piece_on_square(square)[0]
     pawn_direction = "N"
     pawn_capture_directions = ["NE", "NW"]
+    pawn_promotion_rank = "8"
     if pawn_color == "black":
         pawn_direction = "S"
         pawn_capture_directions = ["SE", "SW"]
-    result = set()
+        pawn_promotion_rank = "1"
+    squares_pawn_can_move_to = set()
 
     square_one_space_forward = get_relative_square(square, pawn_direction, 1)
     piece_on_square_one_space_forward = game_state.board.get_piece_on_square(square_one_space_forward)
+    rank_one_space_forward = square_one_space_forward[1]
     if piece_on_square_one_space_forward is None:
-        result.add(f"{square}-{square_one_space_forward}")
+        squares_pawn_can_move_to.add(square_one_space_forward)
 
     if pawn_is_on_starting_square(pawn_color, square):
         square_two_spaces_forward = get_relative_square(square, pawn_direction, 2)
         piece_on_square_two_spaces_forward = game_state.board.get_piece_on_square(square_two_spaces_forward)
         if piece_on_square_two_spaces_forward is None:
-            result.add(f"{square}-{square_two_spaces_forward}")
+            squares_pawn_can_move_to.add(square_two_spaces_forward)
 
     for direction in pawn_capture_directions:
         end_square = get_relative_square(square, direction, 1)
@@ -130,9 +134,17 @@ def get_possible_moves_for_pawn(game_state, square):
         if piece_on_end_square is not None:
             color_of_piece_on_end_square = piece_on_end_square[0]
             if pawn_color != color_of_piece_on_end_square:
-                result.add(f"{square}-{end_square}")
+                squares_pawn_can_move_to.add(end_square)
 
-    # TODO add support for promotions
+    result = set()
+    if rank_one_space_forward == pawn_promotion_rank:
+        for end_square in squares_pawn_can_move_to:
+            for piece_type in PIECE_TYPES_PAWN_CAN_PROMOTE_TO:
+                result.add(f"{square}-{end_square}={piece_type}")
+    else:  # This is not a promotion move
+        for end_square in squares_pawn_can_move_to:
+            result.add(f"{square}-{end_square}")
+
     return result
 
 

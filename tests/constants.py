@@ -38,6 +38,13 @@ PAWN_CANT_CAPTURE_SAME_COLOR_BOARD.add_piece("white", "R", "e3")
 
 PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE = GameState(PAWN_CANT_CAPTURE_SAME_COLOR_BOARD, "white")
 
+PAWN_CAN_PROMOTE_BOARD = ChessBoard()
+PAWN_CAN_PROMOTE_BOARD.add_piece("white", "K", "e1")
+PAWN_CAN_PROMOTE_BOARD.add_piece("black", "K", "e8")
+PAWN_CAN_PROMOTE_BOARD.add_piece("white", "P", "a7")
+
+PAWN_CAN_PROMOTE_GAME_STATE = GameState(PAWN_CAN_PROMOTE_BOARD, "white")
+
 KINGS_AND_ONE_ROOK_BOARD = ChessBoard()
 KINGS_AND_ONE_ROOK_BOARD.add_piece("white", "K", "e1")
 KINGS_AND_ONE_ROOK_BOARD.add_piece("black", "K", "e8")

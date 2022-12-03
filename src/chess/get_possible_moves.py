@@ -85,7 +85,7 @@ def get_possible_moves_for_king(game_state, square):
     for end_square in possible_end_squares:
         if game_state.board.get_piece_on_square(end_square) is None:
             result.add(f"{square}-{end_square}")
-        else: # There is a piece on end_square
+        else:  # There is a piece on end_square
             # Check whether piece is the same color as the king (blocking king) or
             # whether it's the opposite color (king can capture)
             piece_on_end_square_color = game_state.board.get_piece_on_square(end_square)[0]

@@ -127,6 +127,14 @@ def get_possible_moves_for_bishop(game_state, square):
     return result
 
 
+def get_possible_moves_for_queen(game_state, square):
+    result = set()
+    for direction in EIGHT_CARDINAL_DIRECTIONS:
+        moves_in_this_direction = linear_search_for_moves(game_state, square, direction)
+        result = result.union(moves_in_this_direction)
+    return result
+
+
 def get_possible_moves_for_piece(game_state, square):
     piece_on_square = game_state.board.get_piece_on_square(square)
     piece_type = piece_on_square[1]
@@ -139,5 +147,7 @@ def get_possible_moves_for_piece(game_state, square):
             return get_possible_moves_for_rook(game_state, square)
         case "B":
             return get_possible_moves_for_bishop(game_state, square)
+        case "Q":
+            return get_possible_moves_for_queen(game_state, square)
         case _:
             raise ValueError(f"Unsupported piece type {piece_type}")

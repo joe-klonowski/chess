@@ -4,7 +4,8 @@ from unittest import TestCase
 from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_piece, get_possible_moves_for_king, \
     get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves
 from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE, \
-    KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE
+    KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
+    KING_AND_QUEEN_VS_KING_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
@@ -239,6 +240,43 @@ class TestGetPossibleMoves(TestCase):
             "a7-f2",
             "a7-g1",
             "a7-b8",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_kings_and_queen(self):
+        actual = get_possible_moves(KING_AND_QUEEN_VS_KING_GAME_STATE)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "c3-c2",
+            "c3-c1",
+            "c3-c4",
+            "c3-c5",
+            "c3-c6",
+            "c3-c7",
+            "c3-c8",
+            "c3-b3",
+            "c3-a3",
+            "c3-d3",
+            "c3-e3",
+            "c3-f3",
+            "c3-g3",
+            "c3-h3",
+            "c3-d2",
+            "c3-b4",
+            "c3-a5",
+            "c3-a1",
+            "c3-b2",
+            "c3-d4",
+            "c3-e5",
+            "c3-f6",
+            "c3-g7",
+            "c3-h8",
         }
 
         self.assertEqual(expected, actual)

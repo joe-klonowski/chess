@@ -76,16 +76,22 @@ def get_relative_square(starting_square, direction, number):
 
 
 def get_possible_moves_for_king(game_state, square):
-    squares_to_check = set()
+    possible_end_squares = set()
     for direction in EIGHT_CARDINAL_DIRECTIONS:
         square_in_this_direction = get_relative_square(square, direction, 1)
         if square_in_this_direction is not None:
-            squares_to_check.add(square_in_this_direction)
+            possible_end_squares.add(square_in_this_direction)
     result = set()
-    for square_to_check in squares_to_check:
-        if game_state.board.get_piece_on_square(square_to_check) is None:
-            result.add(f"{square}-{square_to_check}")
-
+    for end_square in possible_end_squares:
+        if game_state.board.get_piece_on_square(end_square) is None:
+            result.add(f"{square}-{end_square}")
+        else: # There is a piece on end_square
+            # Check whether piece is the same color as the king (blocking king) or
+            # whether it's the opposite color (king can capture)
+            piece_on_end_square_color = game_state.board.get_piece_on_square(end_square)[0]
+            king_color = game_state.player_to_move
+            if king_color != piece_on_end_square_color:
+                result.add(f"{square}-{end_square}")
     return result
 
 

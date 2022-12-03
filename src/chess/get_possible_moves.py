@@ -129,9 +129,9 @@ def get_possible_moves_for_pawn(game_state, square):
         piece_on_end_square = game_state.board.get_piece_on_square(end_square)
         if piece_on_end_square is not None:
             color_of_piece_on_end_square = piece_on_end_square[0]
-            color_of_pawn = game_state.player_to_move
-            if color_of_pawn != color_of_piece_on_end_square:
+            if pawn_color != color_of_piece_on_end_square:
                 result.add(f"{square}-{end_square}")
+
     # TODO add support for promotions
     return result
 

@@ -90,26 +90,32 @@ def get_possible_moves_for_pawn(game_state, square):
     return result
 
 
-def get_possible_moves_for_rook(game_state, square):
-    rook_color = game_state.board.get_piece_on_square(square)[0]
+def linear_search_for_moves(game_state, square, direction):
     result = set()
-    # TODO refactor this linear search implementation to be reusable by bishops and queens
-    for direction in FOUR_CARDINAL_DIRECTIONS:
-        i = 1
-        should_check_next_square = True
-        while should_check_next_square:
-            next_square_to_check = get_relative_square(square, direction, i)
-            if next_square_to_check is None:
-                break
-            piece_on_next_square_to_check = game_state.board.get_piece_on_square(next_square_to_check)
-            if piece_on_next_square_to_check is None:
+    i = 1
+    should_check_next_square = True
+    while should_check_next_square:
+        next_square_to_check = get_relative_square(square, direction, i)
+        if next_square_to_check is None:
+            return result
+        piece_on_next_square_to_check = game_state.board.get_piece_on_square(next_square_to_check)
+        if piece_on_next_square_to_check is None:
+            result.add(f"{square}-{next_square_to_check}")
+            i += 1
+        else:  # There is a piece on next_square_to_check
+            should_check_next_square = False
+            color_of_piece_on_next_square_to_check = piece_on_next_square_to_check[0]
+            piece_color = game_state.board.get_piece_on_square(square)[0]
+            if color_of_piece_on_next_square_to_check != piece_color:
                 result.add(f"{square}-{next_square_to_check}")
-                i += 1
-            else:  # There is a piece on next_square_to_check
-                should_check_next_square = False
-                color_of_piece_on_next_square_to_check = piece_on_next_square_to_check[0]
-                if color_of_piece_on_next_square_to_check != rook_color:
-                    result.add(f"{square}-{next_square_to_check}")
+    return result
+
+
+def get_possible_moves_for_rook(game_state, square):
+    result = set()
+    for direction in FOUR_CARDINAL_DIRECTIONS:
+        moves_in_this_direction = linear_search_for_moves(game_state, square, direction)
+        result = result.union(moves_in_this_direction)
     return result
 
 

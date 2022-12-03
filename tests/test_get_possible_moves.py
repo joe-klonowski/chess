@@ -2,8 +2,9 @@ import copy
 from unittest import TestCase
 
 from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_piece, get_possible_moves_for_king, \
-    get_relative_square, get_possible_moves_for_pawn
-from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE
+    get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves
+from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE, \
+    KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
@@ -146,6 +147,47 @@ class TestGetPossibleMoves(TestCase):
             "e8-f7",
             "e8-d8",
             "e8-d7",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_linear_search_for_moves_north_to_same_color_piece(self):
+        actual = linear_search_for_moves(KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, "a1", "N")
+
+        expected = {
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_linear_search_for_moves_north_to_different_color_piece(self):
+        actual = linear_search_for_moves(KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, "a1", "N")
+
+        expected = {
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-a7",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_linear_search_for_moves_southeast(self):
+        actual = linear_search_for_moves(KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, "a7", "SE")
+
+        expected = {
+            "a7-b6",
+            "a7-c5",
+            "a7-d4",
+            "a7-e3",
+            "a7-f2",
+            "a7-g1",
         }
 
         self.assertEqual(expected, actual)

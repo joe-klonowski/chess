@@ -10,6 +10,8 @@ from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GA
 
 
 class TestGetPossibleMoves(TestCase):
+    # TODO add tests that verify possible moves are removed that would put the king in check,
+    # either by moving king into check or by moving a piece that's pinned to the king.
     def test_get_relative_square_north_one(self):
         actual = get_relative_square("e4", "N", 1)
         expected = "e5"
@@ -101,8 +103,6 @@ class TestGetPossibleMoves(TestCase):
         }
 
         self.assertEqual(expected, actual)
-
-    # TODO add test to verify that king can't move into check
 
     def test_get_possible_moves_for_pawn_starting_square(self):
         actual = get_possible_moves_for_pawn(KINGS_AND_ONE_PAWN_GAME_STATE, "e2")

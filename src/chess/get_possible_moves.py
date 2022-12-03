@@ -80,7 +80,6 @@ def get_possible_moves_for_king(game_state, square):
     for direction in EIGHT_CARDINAL_DIRECTIONS:
         square_in_this_direction = get_relative_square(square, direction, 1)
         if square_in_this_direction is not None:
-            # TODO check whether move is blocked by a piece of the same color
             squares_to_check.add(square_in_this_direction)
     result = set()
     for square_to_check in squares_to_check:
@@ -164,19 +163,23 @@ def get_possible_moves_for_queen(game_state, square):
 
 
 def get_possible_moves_for_knight(game_state, square):
-    result = set()
+    possible_end_squares = set()
     for direction in EIGHT_KNIGHT_DIRECTIONS:
         end_square = get_relative_square(square, direction, None)
         if end_square is not None:
-            piece_on_end_square = game_state.board.get_piece_on_square(end_square)
-            if piece_on_end_square is None:
+            possible_end_squares.add(end_square)
+    result = set()
+    for end_square in possible_end_squares:
+        # Check whether move is blocked by a piece of same color.
+        piece_on_end_square = game_state.board.get_piece_on_square(end_square)
+        if piece_on_end_square is None:
+            result.add(f"{square}-{end_square}")
+        else:  # There is a piece on end_square
+            color_of_piece_on_end_square = piece_on_end_square[0]
+            moving_knight_color = game_state.board.get_piece_on_square(square)[0]
+            if color_of_piece_on_end_square != moving_knight_color:
+                # Capture a piece of opposing color
                 result.add(f"{square}-{end_square}")
-            else:  # There is a piece on end_square
-                color_of_piece_on_end_square = piece_on_end_square[0]
-                moving_knight_color = game_state.board.get_piece_on_square(square)[0]
-                if color_of_piece_on_end_square != moving_knight_color:
-                    # Capture a piece of opposing color
-                    result.add(f"{square}-{end_square}")
     return result
 
 

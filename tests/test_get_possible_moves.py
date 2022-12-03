@@ -5,7 +5,8 @@ from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_
     get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves
 from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE, \
     KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
-    KING_AND_QUEEN_VS_KING_GAME_STATE
+    KING_AND_QUEEN_VS_KING_GAME_STATE, KING_AND_KNIGHT_VS_KING_GAME_STATE, KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE, \
+    KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT
 
 
 class TestGetPossibleMoves(TestCase):
@@ -277,6 +278,79 @@ class TestGetPossibleMoves(TestCase):
             "c3-f6",
             "c3-g7",
             "c3-h8",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_kings_and_knight_near_middle(self):
+        actual = get_possible_moves(KING_AND_KNIGHT_VS_KING_GAME_STATE)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "c3-d5",
+            "c3-e4",
+            "c3-e2",
+            "c3-d1",
+            "c3-b1",
+            "c3-a2",
+            "c3-a4",
+            "c3-b5",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_kings_and_knight_near_edge(self):
+        actual = get_possible_moves(KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "b1-a3",
+            "b1-c3",
+            "b1-d2",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_kings_and_knight_blocked_by_king(self):
+        actual = get_possible_moves(KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "c2-d4",
+            "c2-e3",
+            "c2-a1",
+            "c2-a3",
+            "c2-b4",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_kings_and_knight_can_capture_another_piece(self):
+        actual = get_possible_moves(GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "c2-d4",
+            "c2-e3",
+            "c2-a1",
+            "c2-a3",
+            "c2-b4",
         }
 
         self.assertEqual(expected, actual)

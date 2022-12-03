@@ -111,13 +111,16 @@ def get_possible_moves_for_pawn(game_state, square):
         pawn_direction = "S"
     result = set()
 
-    # TODO check whether move is blocked by a piece of the same color
     square_one_space_forward = get_relative_square(square, pawn_direction, 1)
-    result.add(f"{square}-{square_one_space_forward}")
+    piece_on_square_one_space_forward = game_state.board.get_piece_on_square(square_one_space_forward)
+    if piece_on_square_one_space_forward is None:
+        result.add(f"{square}-{square_one_space_forward}")
 
     if pawn_is_on_starting_square(pawn_color, square):
         square_two_spaces_forward = get_relative_square(square, pawn_direction, 2)
-        result.add(f"{square}-{square_two_spaces_forward}")
+        piece_on_square_two_spaces_forward = game_state.board.get_piece_on_square(square_two_spaces_forward)
+        if piece_on_square_two_spaces_forward is None:
+            result.add(f"{square}-{square_two_spaces_forward}")
 
     # TODO add support for captures and promotions
     return result

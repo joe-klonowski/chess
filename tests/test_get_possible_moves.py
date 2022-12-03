@@ -128,6 +128,17 @@ class TestGetPossibleMoves(TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_get_possible_moves_for_pawn_starting_square_double_move_blocked(self):
+        new_game_state = copy.deepcopy(KINGS_AND_ONE_PAWN_GAME_STATE)
+        new_game_state.board.add_piece("white", "B", "e4")
+        actual = get_possible_moves_for_pawn(new_game_state, "e2")
+
+        expected = {
+            "e2-e3",
+        }
+
+        self.assertEqual(expected, actual)
+
     def test_get_possible_moves_for_pawn_not_starting_square(self):
         new_game_state = copy.deepcopy(KINGS_AND_ONE_PAWN_GAME_STATE)
         new_game_state.board.apply_move("e2-e3")
@@ -138,6 +149,14 @@ class TestGetPossibleMoves(TestCase):
         }
 
         self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_for_blocked_pawn(self):
+        new_game_state = copy.deepcopy(KINGS_AND_ONE_PAWN_GAME_STATE)
+        new_game_state.board.apply_move("e2-e3")
+        new_game_state.board.add_piece("black", "N", "e4")
+        actual = get_possible_moves_for_pawn(new_game_state, "e3")
+
+        self.assertEqual(set(), actual)
 
     def test_get_possible_moves_two_kings_one_pawn(self):
         actual = get_possible_moves(KINGS_AND_ONE_PAWN_GAME_STATE)

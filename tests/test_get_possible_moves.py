@@ -214,3 +214,31 @@ class TestGetPossibleMoves(TestCase):
         }
 
         self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_kings_bishop_and_rook(self):
+        actual = get_possible_moves(KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-b1",
+            "a1-c1",
+            "a1-d1",
+            "a7-b6",
+            "a7-c5",
+            "a7-d4",
+            "a7-e3",
+            "a7-f2",
+            "a7-g1",
+            "a7-b8",
+        }
+
+        self.assertEqual(expected, actual)

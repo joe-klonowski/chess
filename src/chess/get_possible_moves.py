@@ -107,8 +107,10 @@ def pawn_is_on_starting_square(pawn_color, square):
 def get_possible_moves_for_pawn(game_state, square):
     pawn_color = game_state.board.get_piece_on_square(square)[0]
     pawn_direction = "N"
+    pawn_capture_directions = ["NE", "NW"]
     if pawn_color == "black":
         pawn_direction = "S"
+        pawn_capture_directions = ["SE", "SW"]
     result = set()
 
     square_one_space_forward = get_relative_square(square, pawn_direction, 1)
@@ -122,7 +124,15 @@ def get_possible_moves_for_pawn(game_state, square):
         if piece_on_square_two_spaces_forward is None:
             result.add(f"{square}-{square_two_spaces_forward}")
 
-    # TODO add support for captures and promotions
+    for direction in pawn_capture_directions:
+        end_square = get_relative_square(square, direction, 1)
+        piece_on_end_square = game_state.board.get_piece_on_square(end_square)
+        if piece_on_end_square is not None:
+            color_of_piece_on_end_square = piece_on_end_square[0]
+            color_of_pawn = game_state.player_to_move
+            if color_of_pawn != color_of_piece_on_end_square:
+                result.add(f"{square}-{end_square}")
+    # TODO add support for promotions
     return result
 
 

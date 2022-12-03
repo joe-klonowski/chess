@@ -22,6 +22,14 @@ KING_CAN_CAPTURE_BOARD.add_piece("black", "P", "d2")
 
 KING_CAN_CAPTURE_GAME_STATE = GameState(KING_CAN_CAPTURE_BOARD, "white")
 
+PAWN_CAN_CAPTURE_BOARD = ChessBoard()
+PAWN_CAN_CAPTURE_BOARD.add_piece("white", "K", "e1")
+PAWN_CAN_CAPTURE_BOARD.add_piece("black", "K", "e8")
+PAWN_CAN_CAPTURE_BOARD.add_piece("white", "P", "d2")
+PAWN_CAN_CAPTURE_BOARD.add_piece("black", "R", "e3")
+
+PAWN_CAN_CAPTURE_GAME_STATE = GameState(PAWN_CAN_CAPTURE_BOARD, "white")
+
 KINGS_AND_ONE_ROOK_BOARD = ChessBoard()
 KINGS_AND_ONE_ROOK_BOARD.add_piece("white", "K", "e1")
 KINGS_AND_ONE_ROOK_BOARD.add_piece("black", "K", "e8")

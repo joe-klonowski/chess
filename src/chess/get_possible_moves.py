@@ -1,3 +1,5 @@
+import copy
+
 from chess.constants import EIGHT_CARDINAL_DIRECTIONS, FOUR_CARDINAL_DIRECTIONS, FOUR_DIAGONAL_DIRECTIONS, \
     EIGHT_KNIGHT_DIRECTIONS, PIECE_TYPES_PAWN_CAN_PROMOTE_TO
 
@@ -234,7 +236,28 @@ def get_possible_moves_for_knight(game_state, square):
     return result
 
 
-PIECE_TYPE_TO_POSSIBLE_MOVES_FUNCTION = {
+def can_any_piece_move_to_square(game_state, square):
+    for (current_piece_square, piece) in game_state.board.get_pieces_for_color(game_state.player_to_move).items():
+        piece_type = piece[1]
+        possible_moves_for_piece = GET_POSSIBLE_MOVES_BY_PIECE_TYPE[piece_type](game_state, current_piece_square)
+        for move in possible_moves_for_piece:
+            destination_square = move[3:5]
+            if destination_square == square:
+                return True
+    return False
+
+
+def is_king_in_check(game_state):
+    opposing_color = "white"
+    if game_state.player_to_move == "white":
+        opposing_color = "black"
+    game_state_with_opposing_color_to_move = copy.deepcopy(game_state)
+    game_state_with_opposing_color_to_move.player_to_move = opposing_color
+    my_king_square = game_state.board.get_king_square(game_state.player_to_move)
+    return can_any_piece_move_to_square(game_state_with_opposing_color_to_move, my_king_square)
+
+
+GET_POSSIBLE_MOVES_BY_PIECE_TYPE = {
     "K": get_possible_moves_for_king,
     "P": get_possible_moves_for_pawn,
     "R": get_possible_moves_for_rook,
@@ -248,4 +271,4 @@ def get_possible_moves_for_piece(game_state, square):
     piece_on_square = game_state.board.get_piece_on_square(square)
     piece_type = piece_on_square[1]
     # TODO filter out moves that would put the king in check
-    return PIECE_TYPE_TO_POSSIBLE_MOVES_FUNCTION[piece_type](game_state, square)
+    return GET_POSSIBLE_MOVES_BY_PIECE_TYPE[piece_type](game_state, square)

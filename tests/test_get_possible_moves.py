@@ -2,13 +2,15 @@ import copy
 from unittest import TestCase
 
 from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_king, \
-    get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves
+    get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves, is_king_in_check, \
+    can_any_piece_move_to_square
 from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE, \
     KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
     KING_AND_QUEEN_VS_KING_GAME_STATE, KING_AND_KNIGHT_VS_KING_GAME_STATE, KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE, \
     KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT, \
     KING_CAN_CAPTURE_GAME_STATE, PAWN_CAN_CAPTURE_GAME_STATE, PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE, \
-    PAWN_CAN_PROMOTE_GAME_STATE, PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE, EN_PASSANT_POSSIBLE_GAME_STATE
+    PAWN_CAN_PROMOTE_GAME_STATE, PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE, EN_PASSANT_POSSIBLE_GAME_STATE, \
+    KINGS_AND_ONE_PAWN_CHECK_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
@@ -463,3 +465,19 @@ class TestGetPossibleMoves(TestCase):
         }
 
         self.assertEqual(expected, actual)
+
+    def test_pawn_check(self):
+        actual = is_king_in_check(KINGS_AND_ONE_PAWN_CHECK_GAME_STATE)
+        self.assertTrue(actual)
+
+    def test_no_check(self):
+        actual = is_king_in_check(KINGS_AND_ONE_PAWN_GAME_STATE)
+        self.assertFalse(actual)
+
+    def test_can_any_piece_move_to_square_true(self):
+        actual = can_any_piece_move_to_square(KINGS_AND_ONE_PAWN_GAME_STATE, "e4")
+        self.assertTrue(actual)
+
+    def test_can_any_piece_move_to_square_false(self):
+        actual = can_any_piece_move_to_square(KINGS_AND_ONE_PAWN_GAME_STATE, "e5")
+        self.assertFalse(actual)

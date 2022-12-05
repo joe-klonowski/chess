@@ -106,28 +106,35 @@ def pawn_is_on_starting_square(pawn_color, square):
 
 
 def get_possible_moves_for_pawn(game_state, square):
+    # TODO maybe break this down into smaller functions?
+
     pawn_color = game_state.board.get_piece_on_square(square)[0]
     pawn_direction = "N"
     pawn_capture_directions = ["NE", "NW"]
     pawn_promotion_rank = "8"
+    en_passant_start_rank = "5"
     if pawn_color == "black":
         pawn_direction = "S"
         pawn_capture_directions = ["SE", "SW"]
         pawn_promotion_rank = "1"
+        en_passant_start_rank = "4"
     squares_pawn_can_move_to = set()
 
+    # Check if we can move one square forward
     square_one_space_forward = get_relative_square(square, pawn_direction, 1)
     piece_on_square_one_space_forward = game_state.board.get_piece_on_square(square_one_space_forward)
     rank_one_space_forward = square_one_space_forward[1]
     if piece_on_square_one_space_forward is None:
         squares_pawn_can_move_to.add(square_one_space_forward)
 
+    # Check if we can move two squares forward
     if pawn_is_on_starting_square(pawn_color, square):
         square_two_spaces_forward = get_relative_square(square, pawn_direction, 2)
         piece_on_square_two_spaces_forward = game_state.board.get_piece_on_square(square_two_spaces_forward)
         if piece_on_square_two_spaces_forward is None:
             squares_pawn_can_move_to.add(square_two_spaces_forward)
 
+    # Check for capture moves
     for direction in pawn_capture_directions:
         end_square = get_relative_square(square, direction, 1)
         piece_on_end_square = game_state.board.get_piece_on_square(end_square)
@@ -135,6 +142,19 @@ def get_possible_moves_for_pawn(game_state, square):
             color_of_piece_on_end_square = piece_on_end_square[0]
             if pawn_color != color_of_piece_on_end_square:
                 squares_pawn_can_move_to.add(end_square)
+
+    # Check for en passant
+    current_rank = square[1]
+    if current_rank == en_passant_start_rank:
+        en_passantable_pawn_square = game_state.pawn_that_just_moved_two_squares
+        if en_passantable_pawn_square is not None:
+            square_west_of_current_square = get_relative_square(square, "W", 1)
+            square_east_of_current_square = get_relative_square(square, "E", 1)
+            square_to_move_to_en_passant = get_relative_square(en_passantable_pawn_square, pawn_direction, 1)
+            if square_west_of_current_square == en_passantable_pawn_square:
+                squares_pawn_can_move_to.add(square_to_move_to_en_passant)
+            elif square_east_of_current_square == en_passantable_pawn_square:
+                squares_pawn_can_move_to.add(square_to_move_to_en_passant)
 
     result = set()
     if rank_one_space_forward == pawn_promotion_rank:

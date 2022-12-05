@@ -8,7 +8,7 @@ from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GA
     KING_AND_QUEEN_VS_KING_GAME_STATE, KING_AND_KNIGHT_VS_KING_GAME_STATE, KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE, \
     KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT, \
     KING_CAN_CAPTURE_GAME_STATE, PAWN_CAN_CAPTURE_GAME_STATE, PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE, \
-    PAWN_CAN_PROMOTE_GAME_STATE, PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE
+    PAWN_CAN_PROMOTE_GAME_STATE, PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE, EN_PASSANT_POSSIBLE_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
@@ -204,6 +204,32 @@ class TestGetPossibleMoves(TestCase):
             "a7-b8=R",
             "a7-b8=B",
             "a7-b8=N",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_for_pawn_that_can_promote_and_capture(self):
+        actual = get_possible_moves_for_pawn(PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE, "a7")
+
+        expected = {
+            "a7-a8=Q",
+            "a7-a8=R",
+            "a7-a8=B",
+            "a7-a8=N",
+            "a7-b8=Q",
+            "a7-b8=R",
+            "a7-b8=B",
+            "a7-b8=N",
+        }
+
+        self.assertEqual(expected, actual)
+
+    def test_get_possible_moves_for_pawn_with_en_passant(self):
+        actual = get_possible_moves_for_pawn(EN_PASSANT_POSSIBLE_GAME_STATE, "a5")
+
+        expected = {
+            "a5-a6",
+            "a5-b6",
         }
 
         self.assertEqual(expected, actual)

@@ -53,6 +53,15 @@ PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD.add_piece("black", "B", "b8")
 
 PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE = GameState(PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD, "white")
 
+EN_PASSANT_POSSIBLE_BOARD = ChessBoard()
+EN_PASSANT_POSSIBLE_BOARD.add_piece("white", "K", "e1")
+EN_PASSANT_POSSIBLE_BOARD.add_piece("black", "K", "e8")
+EN_PASSANT_POSSIBLE_BOARD.add_piece("white", "P", "a5")
+EN_PASSANT_POSSIBLE_BOARD.add_piece("black", "B", "b5")
+
+EN_PASSANT_POSSIBLE_GAME_STATE = GameState(EN_PASSANT_POSSIBLE_BOARD, "white")
+EN_PASSANT_POSSIBLE_GAME_STATE.pawn_that_just_moved_two_squares = "b5"
+
 KINGS_AND_ONE_ROOK_BOARD = ChessBoard()
 KINGS_AND_ONE_ROOK_BOARD.add_piece("white", "K", "e1")
 KINGS_AND_ONE_ROOK_BOARD.add_piece("black", "K", "e8")

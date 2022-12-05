@@ -2,6 +2,7 @@ import copy
 
 from chess.constants import EIGHT_CARDINAL_DIRECTIONS, FOUR_CARDINAL_DIRECTIONS, FOUR_DIAGONAL_DIRECTIONS, \
     EIGHT_KNIGHT_DIRECTIONS, PIECE_TYPES_PAWN_CAN_PROMOTE_TO
+from chess.utils import opposite_color
 
 
 def get_possible_moves(game_state):
@@ -12,7 +13,12 @@ def get_possible_moves(game_state):
     for square in pieces_of_player_to_move.keys():
         moves_for_this_piece = get_possible_moves_for_piece(game_state, square)
         result = result.union(moves_for_this_piece)
-    # TODO add support for castling
+
+    if can_castle_queenside(game_state):
+        result.add("0-0-0")
+    if can_castle_kingside(game_state):
+        result.add("0-0")
+
     return result
 
 
@@ -272,3 +278,69 @@ def get_possible_moves_for_piece(game_state, square):
     piece_type = piece_on_square[1]
     # TODO filter out moves that would put the king in check
     return GET_POSSIBLE_MOVES_BY_PIECE_TYPE[piece_type](game_state, square)
+
+
+def can_castle_queenside(game_state):
+    squares_that_must_have_no_pieces = {"b8", "c8", "d8"}
+    squares_that_must_not_be_attacked = {"c8", "d8", "e8"}
+    if game_state.player_to_move == "white":
+        squares_that_must_have_no_pieces = {"b1", "c1", "d1"}
+        squares_that_must_not_be_attacked = {"c1", "d1", "e1"}
+        if game_state.white_king_has_moved:
+            return False
+        if game_state.a1_rook_has_moved:
+            return False
+        if game_state.board.get_piece_on_square("a1") != ("white", "R"):
+            return False
+    else:  # player to move is black
+        if game_state.black_king_has_moved:
+            return False
+        if game_state.a8_rook_has_moved:
+            return False
+        if game_state.board.get_piece_on_square("a8") != ("black", "R"):
+            return False
+
+    for square in squares_that_must_have_no_pieces:
+        if game_state.board.get_piece_on_square(square):
+            return False
+
+    game_state_with_opposite_player_to_move = copy.deepcopy(game_state)
+    game_state_with_opposite_player_to_move.player_to_move = opposite_color(game_state.player_to_move)
+    for square in squares_that_must_not_be_attacked:
+        if can_any_piece_move_to_square(game_state_with_opposite_player_to_move, square):
+            return False
+
+    return True
+
+
+def can_castle_kingside(game_state):
+    squares_that_must_have_no_pieces = {"f8", "g8"}
+    squares_that_must_not_be_attacked = {"e8", "f8", "g8"}
+    if game_state.player_to_move == "white":
+        squares_that_must_have_no_pieces = {"f1", "g1"}
+        squares_that_must_not_be_attacked = {"e1", "f1", "g1"}
+        if game_state.white_king_has_moved:
+            return False
+        if game_state.h1_rook_has_moved:
+            return False
+        if game_state.board.get_piece_on_square("h1") != ("white", "R"):
+            return False
+    else:  # player to move is black
+        if game_state.black_king_has_moved:
+            return False
+        if game_state.h8_rook_has_moved:
+            return False
+        if game_state.board.get_piece_on_square("h8") != ("black", "R"):
+            return False
+
+    for square in squares_that_must_have_no_pieces:
+        if game_state.board.get_piece_on_square(square):
+            return False
+
+    game_state_with_opposite_player_to_move = copy.deepcopy(game_state)
+    game_state_with_opposite_player_to_move.player_to_move = opposite_color(game_state.player_to_move)
+    for square in squares_that_must_not_be_attacked:
+        if can_any_piece_move_to_square(game_state_with_opposite_player_to_move, square):
+            return False
+
+    return True

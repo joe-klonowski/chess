@@ -1,11 +1,13 @@
 import copy
 from unittest import TestCase
 
+from chess.ChessBoard import ChessBoard
+from chess.GameState import GameState
 from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_king, \
     get_relative_square, get_possible_moves_for_pawn, linear_search_for_moves, is_king_in_check, \
     can_any_piece_move_to_square
-from constants import KINGS_AND_ONE_PAWN_GAME_STATE, KINGS_AND_ONE_BLACK_PAWN_GAME_STATE, KINGS_AND_ONE_ROOK_GAME_STATE, \
-    KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
+from constants import KINGS_AND_ONE_PAWN_GAME_STATE, \
+    KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
     KING_AND_QUEEN_VS_KING_GAME_STATE, KING_AND_KNIGHT_VS_KING_GAME_STATE, KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE, \
     KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT, \
     KING_CAN_CAPTURE_GAME_STATE, PAWN_CAN_CAPTURE_GAME_STATE, PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE, \
@@ -251,7 +253,13 @@ class TestGetPossibleMoves(TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_possible_moves_two_kings_one_black_pawn(self):
-        actual = get_possible_moves(KINGS_AND_ONE_BLACK_PAWN_GAME_STATE)
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("black", "P", "e7")
+        game_state = GameState(board, "black")
+
+        actual = get_possible_moves(game_state)
 
         expected = {
             "e7-e6",
@@ -265,7 +273,14 @@ class TestGetPossibleMoves(TestCase):
         self.assertEqual(expected, actual)
 
     def test_linear_search_for_moves_north_to_same_color_piece(self):
-        actual = linear_search_for_moves(KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE, "a1", "N")
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        board.add_piece("white", "B", "a7")
+        game_state = GameState(board, "white")
+
+        actual = linear_search_for_moves(game_state, "a1", "N")
 
         expected = {
             "a1-a2",
@@ -306,7 +321,14 @@ class TestGetPossibleMoves(TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_possible_moves_kings_and_white_rook(self):
-        actual = get_possible_moves(KINGS_AND_ONE_ROOK_GAME_STATE)
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        game_state = GameState(board, "white")
+        game_state.a1_rook_has_moved = True
+
+        actual = get_possible_moves(game_state)
 
         expected = {
             "e1-f1",
@@ -325,11 +347,18 @@ class TestGetPossibleMoves(TestCase):
             "a1-c1",
             "a1-d1",
         }
-
         self.assertEqual(expected, actual)
 
     def test_get_possible_moves_kings_bishop_and_rook(self):
-        actual = get_possible_moves(KING_ROOK_AND_BISHOP_VS_KING_GAME_STATE)
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        board.add_piece("white", "B", "a7")
+        game_state = GameState(board, "white")
+        game_state.a1_rook_has_moved = True
+
+        actual = get_possible_moves(game_state)
 
         expected = {
             "e1-f1",
@@ -481,3 +510,176 @@ class TestGetPossibleMoves(TestCase):
     def test_can_any_piece_move_to_square_false(self):
         actual = can_any_piece_move_to_square(KINGS_AND_ONE_PAWN_GAME_STATE, "e5")
         self.assertFalse(actual)
+
+    def test_can_castle_queenside(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        game_state = GameState(board, "white")
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-a7",
+            "a1-a8",
+            "a1-b1",
+            "a1-c1",
+            "a1-d1",
+            "0-0-0",
+        }
+        self.assertEqual(expected, actual)
+
+    def test_can_castle_kingside(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "h1")
+        game_state = GameState(board, "white")
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "h1-h2",
+            "h1-h3",
+            "h1-h4",
+            "h1-h5",
+            "h1-h6",
+            "h1-h7",
+            "h1-h8",
+            "h1-f1",
+            "h1-g1",
+            "0-0",
+        }
+        self.assertEqual(expected, actual)
+
+    def test_cant_castle_if_king_has_moved(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        game_state = GameState(board, "white")
+        game_state.white_king_has_moved = True
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-a7",
+            "a1-a8",
+            "a1-b1",
+            "a1-c1",
+            "a1-d1",
+        }
+        self.assertEqual(expected, actual)
+
+    def test_cant_castle_if_rook_has_moved(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        game_state = GameState(board, "white")
+        game_state.a1_rook_has_moved = True
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-a7",
+            "a1-a8",
+            "a1-b1",
+            "a1-c1",
+            "a1-d1",
+        }
+        self.assertEqual(expected, actual)
+
+    def test_cant_castle_if_another_piece_in_the_way(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        board.add_piece("black", "B", "b1")
+        game_state = GameState(board, "white")
+        game_state.a1_rook_has_moved = True
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-a7",
+            "a1-a8",
+            "a1-b1",
+        }
+        self.assertEqual(expected, actual)
+
+    def test_cant_castle_if_another_piece_attacking_intermediate_square(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "R", "a1")
+        board.add_piece("black", "R", "d3")
+        game_state = GameState(board, "white")
+        game_state.a1_rook_has_moved = True
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-f2",
+            "e1-d1",
+            "e1-d2",
+            "e1-e2",
+            "a1-a2",
+            "a1-a3",
+            "a1-a4",
+            "a1-a5",
+            "a1-a6",
+            "a1-a7",
+            "a1-a8",
+            "a1-b1",
+            "a1-c1",
+            "a1-d1",
+        }
+        self.assertEqual(expected, actual)

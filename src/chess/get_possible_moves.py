@@ -234,22 +234,18 @@ def get_possible_moves_for_knight(game_state, square):
     return result
 
 
+PIECE_TYPE_TO_POSSIBLE_MOVES_FUNCTION = {
+    "K": get_possible_moves_for_king,
+    "P": get_possible_moves_for_pawn,
+    "R": get_possible_moves_for_rook,
+    "B": get_possible_moves_for_bishop,
+    "Q": get_possible_moves_for_queen,
+    "N": get_possible_moves_for_knight,
+}
+
+
 def get_possible_moves_for_piece(game_state, square):
     piece_on_square = game_state.board.get_piece_on_square(square)
     piece_type = piece_on_square[1]
     # TODO filter out moves that would put the king in check
-    match piece_type:
-        case "K":
-            return get_possible_moves_for_king(game_state, square)
-        case "P":
-            return get_possible_moves_for_pawn(game_state, square)
-        case "R":
-            return get_possible_moves_for_rook(game_state, square)
-        case "B":
-            return get_possible_moves_for_bishop(game_state, square)
-        case "Q":
-            return get_possible_moves_for_queen(game_state, square)
-        case "N":
-            return get_possible_moves_for_knight(game_state, square)
-        case _:
-            raise ValueError(f"Unsupported piece type {piece_type}")
+    return PIECE_TYPE_TO_POSSIBLE_MOVES_FUNCTION[piece_type](game_state, square)

@@ -2,11 +2,18 @@ from sortedcontainers import SortedDict
 
 
 class ChessBoard:
+    white_king_square = None
+    black_king_square = None
+
     def __init__(self):
         self.pieces = SortedDict({})
 
     def add_piece(self, color, piece, square):
         self.pieces.update({square: (color, piece)})
+        if piece == "K" and color == "white":
+            self.white_king_square = square
+        elif piece == "K" and color == "black":
+            self.black_king_square = square
 
     def get_pieces(self):
         return self.pieces
@@ -30,6 +37,12 @@ class ChessBoard:
                 square = item[0]
                 result.update({square: piece})
         return result
+
+    def get_king_square(self, color):
+        if color == "white":
+            return self.white_king_square
+        else:
+            return self.black_king_square
 
     def __eq__(self, other):
         return self.pieces == other.pieces

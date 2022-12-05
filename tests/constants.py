@@ -8,6 +8,13 @@ KINGS_AND_ONE_PAWN_BOARD.add_piece("white", "P", "e2")
 
 KINGS_AND_ONE_PAWN_GAME_STATE = GameState(KINGS_AND_ONE_PAWN_BOARD, "white")
 
+KINGS_AND_ONE_PAWN_CHECK_BOARD = ChessBoard()
+KINGS_AND_ONE_PAWN_CHECK_BOARD.add_piece("white", "K", "e1")
+KINGS_AND_ONE_PAWN_CHECK_BOARD.add_piece("black", "K", "e8")
+KINGS_AND_ONE_PAWN_CHECK_BOARD.add_piece("white", "P", "d7")
+
+KINGS_AND_ONE_PAWN_CHECK_GAME_STATE = GameState(KINGS_AND_ONE_PAWN_CHECK_BOARD, "black")
+
 KINGS_AND_ONE_BLACK_PAWN_BOARD = ChessBoard()
 KINGS_AND_ONE_BLACK_PAWN_BOARD.add_piece("white", "K", "e1")
 KINGS_AND_ONE_BLACK_PAWN_BOARD.add_piece("black", "K", "e8")

@@ -45,6 +45,14 @@ PAWN_CAN_PROMOTE_BOARD.add_piece("white", "P", "a7")
 
 PAWN_CAN_PROMOTE_GAME_STATE = GameState(PAWN_CAN_PROMOTE_BOARD, "white")
 
+PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD = ChessBoard()
+PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD.add_piece("white", "K", "e1")
+PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD.add_piece("black", "K", "e8")
+PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD.add_piece("white", "P", "a7")
+PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD.add_piece("black", "B", "b8")
+
+PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE = GameState(PAWN_CAN_CAPTURE_AND_PROMOTE_BOARD, "white")
+
 KINGS_AND_ONE_ROOK_BOARD = ChessBoard()
 KINGS_AND_ONE_ROOK_BOARD.add_piece("white", "K", "e1")
 KINGS_AND_ONE_ROOK_BOARD.add_piece("black", "K", "e8")

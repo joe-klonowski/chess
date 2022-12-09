@@ -1,7 +1,6 @@
 import copy
 
 from chess import GameState
-from chess.constants import STARTING_GAME_STATE
 from chess.utils import opposite_color
 
 
@@ -17,6 +16,27 @@ def apply_move(game_state, move) -> GameState:
 
     game_state_copy.player_to_move = opposite_color(game_state.player_to_move)
 
-    # TODO update a few more metadata things in game_state like whether kings have moved.
+    # The rest of the logic updates metadata for tracking whether castling or en passant should be possible
+    if piece_type == "K" and piece_color == "white":
+        game_state_copy.white_king_has_moved = True
+    if piece_type == "K" and piece_color == "black":
+        game_state_copy.black_king_has_moved = True
+    if piece_type == "P":
+        start_rank = int(start_square[1])
+        end_rank = int(end_square[1])
+        rank_diff = abs(start_rank - end_rank)
+        if rank_diff == 2:
+            game_state_copy.pawn_that_just_moved_two_squares = end_square
+    else:  # Not a pawn move
+        game_state_copy.pawn_that_just_moved_two_squares = None
+    if piece_type == "R":
+        if start_square == "a1":
+            game_state_copy.a1_rook_has_moved = True
+        if start_square == "a8":
+            game_state_copy.a8_rook_has_moved = True
+        if start_square == "h1":
+            game_state_copy.h1_rook_has_moved = True
+        if start_square == "h8":
+            game_state_copy.h8_rook_has_moved = True
 
     return game_state_copy

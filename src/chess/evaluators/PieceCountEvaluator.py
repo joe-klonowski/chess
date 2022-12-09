@@ -1,5 +1,6 @@
 from chess.evaluators.Evaluator import Evaluator
 
+# TODO maybe factor these out into piece classes?
 PIECE_TYPE_TO_POINT_VALUE = {
     "P": 1,
     "B": 3,

@@ -21,7 +21,7 @@ class TestEndConditions(TestCase):
     def test_is_checkmate_false(self):
         self.assertFalse(is_checkmate(STARTING_GAME_STATE))
 
-    def test_is_checkmate_stalemated_position(self):
+    def test_is_checkmate_in_stalemated_position(self):
         board = ChessBoard()
         board.add_piece("black", "K", "a8")
         board.add_piece("white", "K", "e6")
@@ -42,7 +42,7 @@ class TestEndConditions(TestCase):
     def test_is_stalemate_false(self):
         self.assertFalse(is_stalemate(STARTING_GAME_STATE))
 
-    def test_is_stalemate_checkmate_position(self):
+    def test_is_stalemate_in_checkmate_position(self):
         board = ChessBoard()
         board.add_piece("black", "K", "e8")
         board.add_piece("white", "K", "e6")

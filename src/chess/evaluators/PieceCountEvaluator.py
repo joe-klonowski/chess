@@ -11,8 +11,7 @@ PIECE_TYPE_TO_POINT_VALUE = {
 
 
 class PieceCountEvaluator(Evaluator):
-    @staticmethod
-    def evaluate(game_state) -> float:
+    def evaluate(self, game_state) -> float:
         result = 0.0
 
         for white_piece in game_state.board.get_pieces_for_color("white").values():

@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class Evaluator(ABC):
-    @staticmethod
+
     @abstractmethod
-    def evaluate(game_state) -> float:
+    def evaluate(self, game_state) -> float:
         """
         :return: a float representing the evaluation of the position. Higher numbers indicate a better
         position for white.

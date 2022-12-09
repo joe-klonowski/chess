@@ -1,12 +1,9 @@
-from sortedcontainers import SortedDict
-
-
 class ChessBoard:
     white_king_square = None
     black_king_square = None
 
     def __init__(self):
-        self.pieces = SortedDict({})
+        self.pieces = dict()
 
     def add_piece(self, color, piece, square):
         self.pieces.update({square: (color, piece)})
@@ -29,7 +26,7 @@ class ChessBoard:
         self.pieces.update({starting_square: None, ending_square: piece_type})
 
     def get_pieces_for_color(self, color):
-        result = SortedDict()
+        result = dict()
         for item in self.pieces.items():
             piece = item[1]
             current_item_color = piece[0]

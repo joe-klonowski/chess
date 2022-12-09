@@ -12,6 +12,9 @@ class ChessBoard:
         elif piece == "K" and color == "black":
             self.black_king_square = square
 
+    def remove_piece(self, square) -> None:
+        self.pieces.pop(square)
+
     def get_pieces(self):
         return self.pieces
 

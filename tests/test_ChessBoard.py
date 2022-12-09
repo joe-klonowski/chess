@@ -1,5 +1,4 @@
 import copy
-from sortedcontainers import SortedDict
 
 from chess.ChessBoard import ChessBoard
 from unittest import TestCase
@@ -11,14 +10,23 @@ from constants import KINGS_AND_ONE_PAWN_BOARD
 class TestChessBoard(TestCase):
     def test_empty_board(self):
         new_board = ChessBoard()
-        self.assertEqual(SortedDict({}), new_board.get_pieces())
+        self.assertEqual(dict(), new_board.get_pieces())
 
     def test_add_piece(self):
-        queen_on_d1 = SortedDict({"d1": ("white", "Q")})
+        queen_on_d1 = dict({"d1": ("white", "Q")})
 
         new_board = ChessBoard()
         new_board.add_piece("white", "Q", "d1")
 
+        self.assertEqual(queen_on_d1, new_board.get_pieces())
+
+    def test_remove_piece(self):
+        new_board = ChessBoard()
+        new_board.add_piece("white", "Q", "d1")
+        new_board.add_piece("black", "Q", "d8")
+        new_board.remove_piece("d8")
+
+        queen_on_d1 = dict({"d1": ("white", "Q")})
         self.assertEqual(queen_on_d1, new_board.get_pieces())
 
     def test_get_piece_on_square_with_empty_square(self):
@@ -45,7 +53,7 @@ class TestChessBoard(TestCase):
     def test_get_pieces_for_color_white(self):
         actual = KINGS_AND_ONE_PAWN_BOARD.get_pieces_for_color("white")
 
-        expected = SortedDict({
+        expected = dict({
             "e1": ("white", "K"),
             "e2": ("white", "P"),
         })

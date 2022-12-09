@@ -9,15 +9,13 @@ from chess.get_possible_moves import get_possible_moves, get_possible_moves_for_
 from constants import KINGS_AND_ONE_PAWN_GAME_STATE, \
     KING_AND_ROOK_VS_BISHOP_AND_KING_GAME_STATE, \
     KING_AND_QUEEN_VS_KING_GAME_STATE, KING_AND_KNIGHT_VS_KING_GAME_STATE, KING_AND_KNIGHT_NEAR_EDGE_VS_KING_GAME_STATE, \
-    KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT, \
+    KING_AND_KNIGHT_BLOCKED_BY_KING_VS_KING_GAME_STATE, \
     KING_CAN_CAPTURE_GAME_STATE, PAWN_CAN_CAPTURE_GAME_STATE, PAWN_CANT_CAPTURE_SAME_COLOR_GAME_STATE, \
     PAWN_CAN_PROMOTE_GAME_STATE, PAWN_CAN_CAPTURE_AND_PROMOTE_GAME_STATE, EN_PASSANT_POSSIBLE_GAME_STATE, \
     KINGS_AND_ONE_PAWN_CHECK_GAME_STATE
 
 
 class TestGetPossibleMoves(TestCase):
-    # TODO add tests that verify possible moves are removed that would put the king in check,
-    # either by moving king into check or by moving a piece that's pinned to the king.
     def test_get_relative_square_north_one(self):
         actual = get_relative_square("e4", "N", 1)
         expected = "e5"
@@ -478,19 +476,19 @@ class TestGetPossibleMoves(TestCase):
         self.assertEqual(expected, actual)
 
     def test_get_possible_moves_kings_and_knight_can_capture_another_piece(self):
-        actual = get_possible_moves(GAME_STATE_WITH_POSSIBLE_CAPTURE_MOVE_FOR_KNIGHT)
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("white", "N", "c2")
+        board.add_piece("black", "Q", "e3")
+        game_state = GameState(board, "white")
+
+        actual = get_possible_moves(game_state)
 
         expected = {
             "e1-f1",
-            "e1-f2",
             "e1-d1",
-            "e1-d2",
-            "e1-e2",
-            "c2-d4",
             "c2-e3",
-            "c2-a1",
-            "c2-a3",
-            "c2-b4",
         }
 
         self.assertEqual(expected, actual)
@@ -668,8 +666,6 @@ class TestGetPossibleMoves(TestCase):
         expected = {
             "e1-f1",
             "e1-f2",
-            "e1-d1",
-            "e1-d2",
             "e1-e2",
             "a1-a2",
             "a1-a3",
@@ -681,5 +677,20 @@ class TestGetPossibleMoves(TestCase):
             "a1-b1",
             "a1-c1",
             "a1-d1",
+        }
+        self.assertEqual(expected, actual)
+
+    def test_cant_make_move_that_causes_check(self):
+        board = ChessBoard()
+        board.add_piece("white", "K", "e1")
+        board.add_piece("black", "K", "e8")
+        board.add_piece("black", "R", "a2")
+        game_state = GameState(board, "white")
+
+        actual = get_possible_moves(game_state)
+
+        expected = {
+            "e1-f1",
+            "e1-d1",
         }
         self.assertEqual(expected, actual)

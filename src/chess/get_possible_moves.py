@@ -1,5 +1,6 @@
 import copy
 
+from chess.apply_move import apply_move
 from chess.constants import EIGHT_CARDINAL_DIRECTIONS, FOUR_CARDINAL_DIRECTIONS, FOUR_DIAGONAL_DIRECTIONS, \
     EIGHT_KNIGHT_DIRECTIONS, PIECE_TYPES_PAWN_CAN_PROMOTE_TO
 from chess.utils import opposite_color
@@ -273,11 +274,25 @@ GET_POSSIBLE_MOVES_BY_PIECE_TYPE = {
 }
 
 
+def would_cause_check(game_state, move):
+    moving_color = game_state.player_to_move
+    new_game_state = apply_move(game_state, move)
+    square_for_king_of_moving_color = new_game_state.board.white_king_square
+    if moving_color == "black":
+        square_for_king_of_moving_color = new_game_state.board.black_king_square
+    return can_any_piece_move_to_square(new_game_state, square_for_king_of_moving_color)
+
+
+def remove_moves_that_would_cause_check(game_state, possible_moves) -> set[str]:
+    return [move for move in possible_moves if not would_cause_check(game_state, move)]
+
+
 def get_possible_moves_for_piece(game_state, square):
     piece_on_square = game_state.board.get_piece_on_square(square)
     piece_type = piece_on_square[1]
     # TODO filter out moves that would put the king in check
-    return GET_POSSIBLE_MOVES_BY_PIECE_TYPE[piece_type](game_state, square)
+    all_possible_moves = GET_POSSIBLE_MOVES_BY_PIECE_TYPE[piece_type](game_state, square)
+    return remove_moves_that_would_cause_check(game_state, all_possible_moves)
 
 
 def can_castle_queenside(game_state):

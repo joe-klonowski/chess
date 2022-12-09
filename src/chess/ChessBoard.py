@@ -5,15 +5,15 @@ class ChessBoard:
     def __init__(self):
         self.pieces = dict()
 
-    def add_piece(self, color, piece, square):
-        self.pieces.update({square: (color, piece)})
-        if piece == "K" and color == "white":
+    def add_piece(self, color, piece_type, square):
+        self.pieces.update({square: (color, piece_type)})
+        if piece_type == "K" and color == "white":
             self.white_king_square = square
-        elif piece == "K" and color == "black":
+        elif piece_type == "K" and color == "black":
             self.black_king_square = square
 
-    def remove_piece(self, square) -> None:
-        self.pieces.pop(square)
+    def remove_piece(self, square) -> (str, str):
+        return self.pieces.pop(square)
 
     def get_pieces(self):
         return self.pieces
@@ -46,3 +46,9 @@ class ChessBoard:
 
     def __eq__(self, other):
         return self.pieces == other.pieces
+
+    def diff(self, other):
+        self_set = set(self.pieces.items())
+        other_set = set(other.pieces.items())
+
+        return self_set ^ other_set

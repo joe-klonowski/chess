@@ -24,10 +24,11 @@ class TestChessBoard(TestCase):
         new_board = ChessBoard()
         new_board.add_piece("white", "Q", "d1")
         new_board.add_piece("black", "Q", "d8")
-        new_board.remove_piece("d8")
+        result = new_board.remove_piece("d8")
 
         queen_on_d1 = dict({"d1": ("white", "Q")})
         self.assertEqual(queen_on_d1, new_board.get_pieces())
+        self.assertEqual(("black", "Q"), result)
 
     def test_get_piece_on_square_with_empty_square(self):
         self.assertIsNone(STARTING_BOARD.get_piece_on_square("a3"))

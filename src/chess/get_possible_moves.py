@@ -290,7 +290,6 @@ def remove_moves_that_would_cause_check(game_state, possible_moves) -> set[str]:
 def get_possible_moves_for_piece(game_state, square):
     piece_on_square = game_state.board.get_piece_on_square(square)
     piece_type = piece_on_square[1]
-    # TODO filter out moves that would put the king in check
     all_possible_moves = GET_POSSIBLE_MOVES_BY_PIECE_TYPE[piece_type](game_state, square)
     return remove_moves_that_would_cause_check(game_state, all_possible_moves)
 

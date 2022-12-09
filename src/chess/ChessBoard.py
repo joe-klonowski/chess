@@ -22,7 +22,6 @@ class ChessBoard:
         return self.pieces.get(square)
 
     def apply_move(self, move):
-        # TODO implement castling, promotion, en passant
         starting_square = move[0:2]
         piece_type = self.get_piece_on_square(starting_square)
         ending_square = move[3:5]

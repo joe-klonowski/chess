@@ -5,6 +5,8 @@ from chess.utils import opposite_color
 
 
 def apply_move(game_state, move) -> GameState:
+    # TODO add support for promotion and castling
+
     start_square = move[0:2]
     end_square = move[3:5]
 

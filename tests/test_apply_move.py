@@ -50,3 +50,80 @@ class TestApplyMove(TestCase):
         expected_game_state.a1_rook_has_moved = True
 
         self.assertEqual(expected_game_state, actual_game_state)
+
+    def test_apply_move_white_queenside_castle(self):
+        board = ChessBoard()
+        board.add_piece("white", "R", "a1")
+        board.add_piece("white", "K", "e1")
+        game_state = GameState(board, "white")
+
+        actual_game_state = apply_move(game_state, "0-0-0")
+
+        expected_board = ChessBoard()
+        expected_board.add_piece("white", "R", "d1")
+        expected_board.add_piece("white", "K", "c1")
+        expected_game_state = GameState(expected_board, "black")
+        expected_game_state.a1_rook_has_moved = True
+        expected_game_state.white_king_has_moved = True
+
+        self.assertEqual(expected_game_state, actual_game_state)
+
+    def test_apply_move_white_kingside_castle(self):
+        board = ChessBoard()
+        board.add_piece("white", "R", "h1")
+        board.add_piece("white", "K", "e1")
+        game_state = GameState(board, "white")
+
+        actual_game_state = apply_move(game_state, "0-0")
+
+        expected_board = ChessBoard()
+        expected_board.add_piece("white", "R", "f1")
+        expected_board.add_piece("white", "K", "g1")
+        expected_game_state = GameState(expected_board, "black")
+        expected_game_state.h1_rook_has_moved = True
+        expected_game_state.white_king_has_moved = True
+
+        self.assertEqual(expected_game_state, actual_game_state)
+
+    def test_apply_move_black_kingside_castle(self):
+        board = ChessBoard()
+        board.add_piece("black", "R", "h8")
+        board.add_piece("black", "K", "e8")
+        game_state = GameState(board, "black")
+
+        actual_game_state = apply_move(game_state, "0-0")
+
+        expected_board = ChessBoard()
+        expected_board.add_piece("black", "R", "f8")
+        expected_board.add_piece("black", "K", "g8")
+        expected_game_state = GameState(expected_board, "white")
+        expected_game_state.h8_rook_has_moved = True
+        expected_game_state.black_king_has_moved = True
+
+        self.assertEqual(expected_game_state, actual_game_state)
+
+    def test_apply_move_black_promotion(self):
+        board = ChessBoard()
+        board.add_piece("black", "P", "h2")
+        game_state = GameState(board, "black")
+
+        actual_game_state = apply_move(game_state, "h2-h1=N")
+
+        expected_board = ChessBoard()
+        expected_board.add_piece("black", "N", "h1")
+        expected_game_state = GameState(expected_board, "white")
+
+        self.assertEqual(expected_game_state, actual_game_state)
+
+    def test_apply_move_white_promotion(self):
+        board = ChessBoard()
+        board.add_piece("white", "P", "b7")
+        game_state = GameState(board, "white")
+
+        actual_game_state = apply_move(game_state, "b7-b8=Q")
+
+        expected_board = ChessBoard()
+        expected_board.add_piece("white", "Q", "b8")
+        expected_game_state = GameState(expected_board, "black")
+
+        self.assertEqual(expected_game_state, actual_game_state)
